@@ -1,0 +1,81 @@
+:host {
+  display: block;
+}
+
+body {
+  box-sizing: border-box;
+}
+.container {
+  width: 210px;
+  height: 210px;
+  display: grid;
+  grid-template-columns: repeat(7, auto);
+  grid-template-rows: repeat(7, auto);
+  border-left: 1px solid black;
+  border-top: 1px solid black;
+}
+
+.tile {
+  width: 29px;
+  height: 29px;
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tile-4 {
+  background-color: tan;
+}
+
+.tile-5 {
+  background-color: tan;
+}
+
+.piece {
+  height: 21px;
+  width: 21px;
+  border: 2px solid rgba(0, 0, 0, 80%);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.piece:hover {
+  cursor: pointer;
+}
+
+.attacker {
+  background-color: indianred;
+}
+
+.defender {
+  background-color: beige;
+}
+
+.king {
+  background-color: beige;
+}
+
+.king::before ,
+.king::after {
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  content: "";
+  display: block;
+  transform: translateX(3px) translateY(3px);
+}
+
+.king::before {
+ 
+  border-bottom: 3px solid rgb(0, 0, 0 , 80%);
+  transform: translateY(-6px) translateX(3px) rotate(0deg); 
+
+}
+
+.king::after {
+  
+  border-bottom: 3px solid rgb(0, 0, 0 , 80%);
+  transform: translateY(2px) translateX(11px) rotate(90deg); 
+}
