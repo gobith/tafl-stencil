@@ -1,4 +1,5 @@
 import { Component, Host, h, State } from '@stencil/core';
+import init , { Size } from "../../../wasm/pkg/wasm";
 
 @Component({
   tag: 'tafl-brandubh',
@@ -6,9 +7,16 @@ import { Component, Host, h, State } from '@stencil/core';
   shadow: true,
 })
 export class TaflBrandubh {
-  @State() board: Array<number> = [
-    4, 0, 3, 3, 3, 0, 4, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 2, 0, 0, 3, 3, 3, 2, 5, 2, 3, 3, 3, 0, 0, 2, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 4, 0, 3, 3, 3, 0, 4,
-  ];
+  size
+  @State() board: Array<number> = [];
+
+
+  async componentDidLoad() {
+    await init();
+    this.size = new Size(1 , 2);
+    this.board = Array.from(this.size.contents());
+   
+  }
 
   pieceClicked = (event: any , index: number) => {
     event.stopPropagation();
@@ -26,7 +34,7 @@ export class TaflBrandubh {
           const cls = 'tile tile-' + element;
           let piece = <div></div>;
           switch (element) {
-            case 5:
+            case 3:
               piece = (
                 <span
                   class="piece king"
@@ -36,7 +44,7 @@ export class TaflBrandubh {
                 ></span>
               );
               break;
-            case 3:
+            case 1:
               piece = (
                 <span
                   class="piece attacker"
