@@ -1,5 +1,5 @@
-import { Component, Host, h, State } from '@stencil/core';
-import init , { Size } from "../../../wasm/pkg/wasm";
+import { Component, h, State } from '@stencil/core';
+import init , { Brandubh } from "../../../wasm/pkg/wasm";
 
 @Component({
   tag: 'tafl-brandubh',
@@ -7,24 +7,29 @@ import init , { Size } from "../../../wasm/pkg/wasm";
   shadow: true,
 })
 export class TaflBrandubh {
-  size
+  brandubh
+  pieceIndex: number;
+
   @State() board: Array<number> = [];
 
 
   async componentDidLoad() {
     await init();
-    this.size = new Size(1 , 2);
-    this.board = Array.from(this.size.contents());
+    this.brandubh = new Brandubh();
+    this.board = Array.from(this.brandubh.board());
    
   }
 
   pieceClicked = (event: any , index: number) => {
     event.stopPropagation();
+    this.pieceIndex = index;
     console.log('piece clicked', index);
   };
 
-  tileClicked = (index: number) => {
-    console.log('tile clicked', index);
+  tileClicked = (tileIndex: number) => {
+    console.log('tile clicked', this.pieceIndex , tileIndex);
+    this.brandubh.move_piece(this.pieceIndex , tileIndex);
+    this.board = Array.from(this.brandubh.board());
   };
 
   render() {
