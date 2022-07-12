@@ -27,10 +27,13 @@ export class TaflBrandubh {
 
   tileClicked = (tileIndex: number) => {
     console.log('tile clicked', this.pieceIndex, tileIndex);
-    this.brandubh.move_piece(this.pieceIndex, tileIndex);
+    let status = this.brandubh.move_piece(this.pieceIndex, tileIndex);
+
+    if (status === 0) {return};
 
     this.animateMove(this.pieceIndex , tileIndex);
 
+    console.log("from rust" , this.brandubh.get_string());
     
 
     const promise = new Promise(resolve => setTimeout(resolve, 500));

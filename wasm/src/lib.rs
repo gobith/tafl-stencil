@@ -20,12 +20,23 @@ impl Brandubh {
     }
 
     #[wasm_bindgen]
-    pub fn move_piece(&mut self, start_idx: usize, end_idx: usize) -> () {
-        self.tafl.move_piece(start_idx, end_idx);
+    pub fn move_piece(&mut self, start_idx: usize, end_idx: usize) -> usize {
+        self.tafl.move_piece(start_idx, end_idx)
         // let mut t  = self.tafl.clone();
         // t.move_piece(start_idx, end_idx);
         // self.tafl = t;
     }
+    #[wasm_bindgen]
+    pub fn get_string(&self) -> String {
+        "Test".into()
+    }
+
+    // #[wasm_bindgen]
+    // pub fn get_strings(&self) -> Vec<String> {
+    //    let str = "Test".into();
+    //     let vec: Vec<String> = vec!([str]);
+    //     vec
+    // }
 }
 
 #[derive(Debug, Clone)]
@@ -121,15 +132,17 @@ impl<const N: usize> fmt::Display for Tafl<N> {
 }
 
 impl<const N: usize> Tafl<N> {
-    pub fn move_piece(&mut self, start_idx: usize, end_idx: usize) -> () {
+    pub fn move_piece(&mut self, start_idx: usize, end_idx: usize) -> usize {
         match self.state.move_piece(start_idx, end_idx) {
             Ok(mut new_state) => {
                 new_state.switch_side();
                 self.history.push(self.state);
                 self.state = new_state;
+                1
             }
             Err(error_string) => {
-                println!("Error {}", error_string)
+                println!("Error {}", error_string);
+                0
             }
         }
     }

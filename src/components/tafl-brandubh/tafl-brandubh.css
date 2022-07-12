@@ -46,6 +46,10 @@ body {
   cursor: pointer;
 }
 
+.tile:hover {
+  cursor: pointer;
+}
+
 .attacker {
   background-color: indianred;
 }
