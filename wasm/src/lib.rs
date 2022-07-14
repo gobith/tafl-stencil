@@ -38,23 +38,20 @@ impl Brandubh {
         attacker_index: usize,
         attacker_level: usize,
     ) -> String {
-
         let defender = match defender_index {
             1 => Player::Human,
             2 => Player::Computer(defender_level),
-            _ => panic!("wrong player index")
+            _ => panic!("wrong player index"),
         };
 
         let attacker = match attacker_index {
             1 => Player::Human,
             2 => Player::Computer(attacker_level),
-            _ => panic!("wrong player index")
+            _ => panic!("wrong player index"),
         };
 
-        self.tafl.start_game(defender , attacker);
+        self.tafl.start_game(defender, attacker);
         "Test".into()
-
-       
     }
 
     // #[wasm_bindgen]
@@ -63,6 +60,12 @@ impl Brandubh {
     //     let vec: Vec<String> = vec!([str]);
     //     vec
     // }
+}
+
+impl fmt::Display for Brandubh {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.tafl)
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -155,11 +158,11 @@ impl<const N: usize> fmt::Display for Tafl<N> {
             write!(f, "{} {} {}", '\n', '\n', '\n')?;
         }
 
-        let side_string = match self.state.side {
-            Side::Attacker => "Attacker",
-            Side::Defender => "Defender",
-        };
-        write!(f, "Turn: {}", side_string)?;
+        write!(
+            f,
+            "Defender: {} , Attacker: {} , Turn: {}",
+            self.defender, self.attacker, self.state.side 
+        )?;
         write!(f, "{}", '\n')?;
 
         Ok(())
@@ -167,16 +170,11 @@ impl<const N: usize> fmt::Display for Tafl<N> {
 }
 
 impl<const N: usize> Tafl<N> {
-
-    fn start_game(&mut self , defender: Player , attacker: Player) -> () {
-
+    fn start_game(&mut self, defender: Player, attacker: Player) -> () {
         self.defender = defender;
         self.attacker = attacker;
         self.game_status = GameStatus::Playing;
-        
-
     }
-
 
     pub fn move_piece(&mut self, start_idx: usize, end_idx: usize) -> usize {
         match self.state.move_piece(start_idx, end_idx) {
@@ -416,12 +414,37 @@ impl Side {
     }
 }
 
+impl fmt::Display for Side {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+
+        let str = match *self {
+            Side::Attacker => "Attacker",
+            Side::Defender => "Defender",
+        };
+        write!(f, "{}", str)
+    }
+}
+
 #[derive(Clone, Copy, Debug)]
 enum GameStatus {
     Setup,
     Playing,
-    Over,
+    Over(Side),
 }
+
+impl fmt::Display for GameStatus {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+
+        let str = match *self {
+            GameStatus::Setup => "Setup".to_owned(),
+            GameStatus::Playing => "Playing".to_owned(),
+            GameStatus::Over(winner) => format!("Game Over Winner: {}" , winner)
+        };
+        write!(f, "{}", str)
+    }
+}
+
+
 
 #[derive(Clone, Copy, Debug)]
 enum Player {
@@ -429,8 +452,25 @@ enum Player {
     Computer(usize),
 }
 
+impl fmt::Display for Player {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let str = match *self {
+            Player::Human => "Human".to_owned(),
+            Player::Computer(lvl) => format!("Computer lvl: {}", lvl),
+        };
+        write!(f, "{}", str)
+    }
+}
+
 #[test]
 fn tfl_move_pieve() {
     let mut tafl = Brandubh::new();
     tafl.move_piece(26, 5);
+}
+
+#[test]
+fn tfl_start_game() {
+    let mut tafl = Brandubh::new();
+    tafl.start_game(1, 0, 2, 1);
+    println!("{}", tafl)
 }
