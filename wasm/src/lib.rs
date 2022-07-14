@@ -31,6 +31,32 @@ impl Brandubh {
         "Test".into()
     }
 
+    pub fn start_game(
+        &mut self,
+        defender_index: usize,
+        defender_level: usize,
+        attacker_index: usize,
+        attacker_level: usize,
+    ) -> String {
+
+        let defender = match defender_index {
+            1 => Player::Human,
+            2 => Player::Computer(defender_level),
+            _ => panic!("wrong player index")
+        };
+
+        let attacker = match attacker_index {
+            1 => Player::Human,
+            2 => Player::Computer(attacker_level),
+            _ => panic!("wrong player index")
+        };
+
+        self.tafl.start_game(defender , attacker);
+        "Test".into()
+
+       
+    }
+
     // #[wasm_bindgen]
     // pub fn get_strings(&self) -> Vec<String> {
     //    let str = "Test".into();
@@ -44,6 +70,9 @@ pub struct Tafl<const N: usize> {
     row_size: usize,
     history: Vec<State<N>>,
     state: State<N>,
+    game_status: GameStatus,
+    defender: Player,
+    attacker: Player,
 }
 
 #[derive(Clone, Copy, Debug)]
@@ -77,7 +106,10 @@ pub fn hnefatafl() -> Tafl<121> {
     Tafl {
         row_size: 11,
         history: vec![state],
-        state: state,
+        state,
+        game_status: GameStatus::Setup,
+        defender: Player::Human,
+        attacker: Player::Human,
     }
 }
 
@@ -97,7 +129,10 @@ pub fn brandubh() -> Tafl<49> {
     Tafl {
         row_size: 7,
         history: vec![state],
-        state: state,
+        state,
+        game_status: GameStatus::Setup,
+        defender: Player::Human,
+        attacker: Player::Human,
     }
 }
 
@@ -132,6 +167,17 @@ impl<const N: usize> fmt::Display for Tafl<N> {
 }
 
 impl<const N: usize> Tafl<N> {
+
+    fn start_game(&mut self , defender: Player , attacker: Player) -> () {
+
+        self.defender = defender;
+        self.attacker = attacker;
+        self.game_status = GameStatus::Playing;
+        
+
+    }
+
+
     pub fn move_piece(&mut self, start_idx: usize, end_idx: usize) -> usize {
         match self.state.move_piece(start_idx, end_idx) {
             Ok(mut new_state) => {
@@ -368,6 +414,19 @@ impl Side {
     fn tile_is_opposite_side(&self, tile: Tile) -> bool {
         !self.tile_is_same_side(tile)
     }
+}
+
+#[derive(Clone, Copy, Debug)]
+enum GameStatus {
+    Setup,
+    Playing,
+    Over,
+}
+
+#[derive(Clone, Copy, Debug)]
+enum Player {
+    Human,
+    Computer(usize),
 }
 
 #[test]
