@@ -1,8 +1,8 @@
-use super::state::State;
 use super::game_status::GameStatus;
 use super::player::Player;
-use super::tile::Tile;
 use super::side::Side;
+use super::state::State;
+use super::tile::Tile;
 use std::fmt;
 
 #[derive(Debug, Clone)]
@@ -14,8 +14,6 @@ pub struct Tafl<const N: usize> {
     defender: Player,
     attacker: Player,
 }
-
-
 
 pub fn hnefatafl() -> Tafl<121> {
     use Tile::*;
@@ -108,18 +106,25 @@ impl<const N: usize> Tafl<N> {
         self.game_status = GameStatus::Playing;
     }
 
-    pub fn move_piece(&mut self, start_idx: usize, end_idx: usize) -> usize {
+    pub fn move_piece(&mut self, start_idx: usize, end_idx: usize) -> Result<(), String> {
         match self.state.move_piece(start_idx, end_idx) {
             Ok(mut new_state) => {
                 new_state.switch_side();
                 self.history.push(self.state);
                 self.state = new_state;
-                1
+                Ok(())
             }
             Err(error_string) => {
                 println!("Error {}", error_string);
-                0
+                Err(error_string)
             }
         }
+    }
+
+    pub fn status_string(&self) -> String {
+        format!(
+            "Status: {} , Defender: {} , Attacker: {} , Turn: {}",
+            self.game_status, self.defender, self.attacker, self.state.side
+        )
     }
 }

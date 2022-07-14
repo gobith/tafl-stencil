@@ -23,11 +23,15 @@ impl Brandubh {
 
     #[wasm_bindgen]
     pub fn move_piece(&mut self, start_idx: usize, end_idx: usize) -> usize {
-        self.tafl.move_piece(start_idx, end_idx)
+       let result = self.tafl.move_piece(start_idx, end_idx);
+       match result {
+        Ok(_) => 1,
+        Err(error_str) => 0
+       }
     }
     #[wasm_bindgen]
     pub fn get_string(&self) -> String {
-        "Test".into()
+        self.tafl.status_string()
     }
 
     pub fn start_game(

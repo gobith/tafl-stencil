@@ -25,7 +25,10 @@ export class TaflBrandubh {
     this.gameStatus = 'start';
     if (this.brandubh) {this.brandubh.free()};
     this.brandubh = new Brandubh();
+    console.log('from rust', this.brandubh.get_string());
+    this.brandubh.start_game(1, 0, 2, 1);
     this.board = Array.from(this.brandubh.board());
+    console.log('from rust', this.brandubh.get_string());
 
   }
 
