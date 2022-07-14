@@ -160,7 +160,7 @@ impl<const N: usize> fmt::Display for Tafl<N> {
 
         write!(
             f,
-            "Defender: {} , Attacker: {} , Turn: {}",
+            "Status: {} , Defender: {} , Attacker: {} , Turn: {}", self.game_status ,
             self.defender, self.attacker, self.state.side 
         )?;
         write!(f, "{}", '\n')?;
