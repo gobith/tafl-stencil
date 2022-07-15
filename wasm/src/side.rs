@@ -14,6 +14,7 @@ impl Side {
             Tile::Attacker => *self == Side::Attacker,
             Tile::Defender => *self == Side::Defender,
             Tile::King => *self == Side::Defender,
+            Tile::CenterCastle => true,
             _ => false,
         }
     }

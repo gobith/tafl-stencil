@@ -26,7 +26,7 @@ pub fn hnefatafl() -> Tafl<121> {
             Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Attacker,
             Empty, Empty, Empty, Empty, Defender, Empty, Empty, Empty, Empty, Attacker, Attacker,
             Empty, Empty, Empty, Defender, Defender, Defender, Empty, Empty, Empty, Attacker,
-            Attacker, Attacker, Empty, Defender, Defender, King, Defender, Defender, Empty,
+            Attacker, Attacker, Empty, Defender, Defender, CenterCastleWithKing, Defender, Defender, Empty,
             Attacker, Attacker, Attacker, Empty, Empty, Empty, Defender, Defender, Defender, Empty,
             Empty, Empty, Attacker, Attacker, Empty, Empty, Empty, Empty, Defender, Empty, Empty,
             Empty, Empty, Attacker, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty,
@@ -54,7 +54,7 @@ pub fn brandubh() -> Tafl<49> {
         board: [
             Castle, Empty, Empty, Attacker, Empty, Empty, Castle, Empty, Empty, Empty, Attacker,
             Empty, Empty, Empty, Empty, Empty, Empty, Defender, Empty, Empty, Empty, Attacker,
-            Attacker, Defender, King, Defender, Attacker, Attacker, Empty, Empty, Empty, Defender,
+            Attacker, Defender, CenterCastleWithKing, Defender, Attacker, Attacker, Empty, Empty, Empty, Defender,
             Empty, Empty, Empty, Empty, Empty, Empty, Attacker, Empty, Empty, Empty, Castle, Empty,
             Empty, Attacker, Empty, Empty, Castle,
         ],
@@ -82,6 +82,8 @@ impl<const N: usize> fmt::Display for Tafl<N> {
                     Tile::King => '⬤',
                     Tile::Castle => '⬛',
                     Tile::CastleWithKing => '⬤',
+                    Tile::CenterCastle => '⬛' ,
+                    Tile::CenterCastleWithKing => '⬤'
                 };
                 write!(f, "{} {}", char, '\t')?;
             }

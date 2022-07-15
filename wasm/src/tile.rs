@@ -7,10 +7,11 @@ pub enum Tile {
     Empty,
     Castle,
     CastleWithKing,
+    CenterCastle,
+    CenterCastleWithKing,
 }
 
 impl Tile {
-
     pub fn number(&self) -> u8 {
         match *self {
             Tile::Attacker => 1,
@@ -19,26 +20,35 @@ impl Tile {
             Tile::King => 3,
             Tile::Castle => 4,
             Tile::CastleWithKing => 5,
+            Tile::CenterCastle => 6,
+            Tile::CenterCastleWithKing => 7,
         }
     }
 
     pub fn can_be_entered_by(&self, tile: Tile) -> bool {
         if tile == Tile::King {
-            if *self == Tile::Castle {
+            if *self == Tile::Castle || *self == Tile::CenterCastle {
                 return true;
             };
         }
         *self == Tile::Empty
     }
 
-    pub fn entering_tile(&self , end_tile: Tile) -> Tile {
+    pub fn entering_tile(&self, end_tile: Tile) -> Tile {
         match end_tile {
             Tile::Castle => Tile::CastleWithKing,
-            _ => *self,
+            Tile::CenterCastle => Tile::CenterCastleWithKing,
+            _ => match *self {
+                Tile::CenterCastleWithKing => Tile::King,
+                _ => *self,
+            },
         }
     }
 
     pub fn leaving_tile(&self) -> Tile {
-        Tile::Empty
+        match *self {
+            Tile::CenterCastleWithKing => Tile::CenterCastle,
+            _ => Tile::Empty,
+        }
     }
 }

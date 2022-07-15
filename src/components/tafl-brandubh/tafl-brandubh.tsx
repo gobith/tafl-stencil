@@ -114,6 +114,16 @@ export class TaflBrandubh {
                 ></span>
               );
               break;
+            case 7:
+              piece = (
+                <span
+                  class="piece king"
+                  onClick={event => {
+                    this.pieceClicked(event, index);
+                  }}
+                ></span>
+              );
+              break;
             case 1:
               piece = (
                 <span

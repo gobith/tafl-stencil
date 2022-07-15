@@ -43,16 +43,19 @@ impl<const N: usize> State<N> {
                 Tile::King => Err("Attacker cannot move King".to_string()),
                 Tile::Castle => Err("Cannot move from Castle".to_string()),
                 Tile::CastleWithKing => Err("Cannot move from Castle".to_string()),
+                Tile::CenterCastle => Err("Cannot move from Castle".to_string()),
+                Tile::CenterCastleWithKing => Err("Attacker cannot move King".to_string())
             },
             Side::Defender => match start_tile {
                 Tile::Empty => Err("Nothing on start position".to_string()),
                 Tile::Attacker => Err("Defender cannot move Attacker".to_string()),
-                Tile::Defender | Tile::King => match self.validate_move(start_idx, end_idx) {
+                Tile::Defender | Tile::King | Tile::CenterCastleWithKing => match self.validate_move(start_idx, end_idx) {
                     Ok(_) => Ok(self.next_state(start_idx, end_idx)),
                     Err(_) => Err("Illegal Move".to_string()),
                 },
                 Tile::Castle => Err("Cannot move from Castle".to_string()),
                 Tile::CastleWithKing => Err("Cannot move from Castle".to_string()),
+                Tile::CenterCastle => Err("Cannot move from Castle".to_string())
             },
         }
     }
