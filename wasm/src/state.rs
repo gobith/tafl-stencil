@@ -10,15 +10,23 @@ pub struct State<const N: usize> {
 }
 
 impl<const N: usize> State<N> {
-    // fn row_col(&self, index: usize) -> (usize, usize) {
-    //     (index / size, index % self.row_size)
-    // }
 
     pub fn switch_side(&mut self) -> () {
         self.side = match self.side {
             Side::Attacker => Side::Defender,
             Side::Defender => Side::Attacker,
         };
+    }
+
+    pub fn winner(&self) -> Option<Side> {
+        if self.board.contains(&Tile::CastleWithKing) {
+            return Some(Side::Defender);
+        };
+        if !self.board.contains(&Tile::King) {
+            return Some(Side::Attacker);
+        };
+
+        None
     }
 
     pub fn move_piece(&self, start_idx: usize, end_idx: usize) -> Result<State<N>, String> {
@@ -50,15 +58,14 @@ impl<const N: usize> State<N> {
     }
 
     fn validate_move(&self, start_idx: usize, end_idx: usize) -> Result<(), String> {
-        if self.board[end_idx] != Tile::Empty {
+
+        let start_tile = self.board[start_idx];
+
+        if !self.board[end_idx].can_be_entered_by(start_tile){
             return Err("End Tile is occupied".to_string());
         };
 
-        // Range<usize >;
-
-        // 1..4
-
-        // let (start_row, start_col) = self.row_col(start_idx);
+    
 
         let start_row = start_idx / self.row_size;
         let end_row = end_idx / self.row_size;
@@ -119,10 +126,13 @@ impl<const N: usize> State<N> {
     }
 
     fn next_state(&self, start_idx: usize, end_idx: usize) -> State<N> {
-        let start = self.board[start_idx];
+        let start_tile = self.board[start_idx];
+        let end_tile = self.board[end_idx];
         let mut clone = self.clone();
-        clone.board[end_idx] = start;
-        clone.board[start_idx] = Tile::Empty;
+
+    
+        clone.board[end_idx] = start_tile.entering_tile(end_tile);
+        clone.board[start_idx] = start_tile.leaving_tile();
 
         let end_row = end_idx / self.row_size;
 

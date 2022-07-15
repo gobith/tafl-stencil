@@ -112,12 +112,20 @@ impl<const N: usize> Tafl<N> {
                 new_state.switch_side();
                 self.history.push(self.state);
                 self.state = new_state;
+                self.validate_game_state();
                 Ok(())
             }
             Err(error_string) => {
                 println!("Error {}", error_string);
                 Err(error_string)
             }
+        }
+    }
+
+    fn validate_game_state(&mut self) -> () {
+        match self.state.winner(){
+            Some(side) => self.game_status = GameStatus::Over(side),
+            None => {}
         }
     }
 

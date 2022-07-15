@@ -20,16 +20,16 @@ export class TaflBrandubh {
     this.startNewGame();
   }
 
-
   startNewGame() {
     this.gameStatus = 'start';
-    if (this.brandubh) {this.brandubh.free()};
+    if (this.brandubh) {
+      this.brandubh.free();
+    }
     this.brandubh = new Brandubh();
     console.log('from rust', this.brandubh.get_string());
     this.brandubh.start_game(1, 0, 2, 1);
     this.board = Array.from(this.brandubh.board());
     console.log('from rust', this.brandubh.get_string());
-
   }
 
   pieceClicked = (event: any, index: number) => {
@@ -95,6 +95,16 @@ export class TaflBrandubh {
           let piece = <div></div>;
           switch (element) {
             case 3:
+              piece = (
+                <span
+                  class="piece king"
+                  onClick={event => {
+                    this.pieceClicked(event, index);
+                  }}
+                ></span>
+              );
+              break;
+            case 5:
               piece = (
                 <span
                   class="piece king"

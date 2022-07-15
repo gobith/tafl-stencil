@@ -26,7 +26,7 @@ impl Brandubh {
        let result = self.tafl.move_piece(start_idx, end_idx);
        match result {
         Ok(_) => 1,
-        Err(error_str) => 0
+        Err(_error_str) => 0
        }
     }
     #[wasm_bindgen]
@@ -57,13 +57,11 @@ impl Brandubh {
         "Test".into()
     }
 
-    // #[wasm_bindgen]
-    // pub fn get_strings(&self) -> Vec<String> {
-    //    let str = "Test".into();
-    //     let vec: Vec<String> = vec!([str]);
-    //     vec
-    // }
-}
+//     #[wasm_bindgen]
+//     pub fn get_strings(&self) -> Box<[JsObject]> {
+//         Box::new(vec![JsObject::NULL])
+//     }
+ }
 
 impl fmt::Display for Brandubh {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
