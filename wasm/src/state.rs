@@ -22,7 +22,7 @@ impl<const N: usize> State<N> {
         if self.board.contains(&Tile::CastleWithKing) {
             return Some(Side::Defender);
         };
-        if !self.board.contains(&Tile::King) {
+        if !self.board.iter().any(|t| t.is_king()) {
             return Some(Side::Attacker);
         };
 

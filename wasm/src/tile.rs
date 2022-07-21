@@ -51,4 +51,13 @@ impl Tile {
             _ => Tile::Empty,
         }
     }
+
+    pub fn is_king(&self) -> bool {
+        match *self {
+            Tile::King => true,
+            Tile::CastleWithKing => true,
+            Tile::CenterCastleWithKing => true,
+            _ => false,
+        }
+    }
 }

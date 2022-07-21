@@ -21,18 +21,127 @@ pub fn hnefatafl() -> Tafl<121> {
         side: Side::Attacker,
         row_size: 11,
         board: [
-            Castle, Empty, Empty, Attacker, Attacker, Attacker, Attacker, Attacker, Empty, Empty,
-            Castle, Empty, Empty, Empty, Empty, Empty, Attacker, Empty, Empty, Empty, Empty, Empty,
-            Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Attacker,
-            Empty, Empty, Empty, Empty, Defender, Empty, Empty, Empty, Empty, Attacker, Attacker,
-            Empty, Empty, Empty, Defender, Defender, Defender, Empty, Empty, Empty, Attacker,
-            Attacker, Attacker, Empty, Defender, Defender, CenterCastleWithKing, Defender, Defender, Empty,
-            Attacker, Attacker, Attacker, Empty, Empty, Empty, Defender, Defender, Defender, Empty,
-            Empty, Empty, Attacker, Attacker, Empty, Empty, Empty, Empty, Defender, Empty, Empty,
-            Empty, Empty, Attacker, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty,
-            Empty, Empty, Empty, Empty, Empty, Empty, Empty, Attacker, Empty, Empty, Empty, Empty,
-            Empty, Castle, Empty, Empty, Attacker, Attacker, Attacker, Attacker, Attacker, Empty,
-            Empty, Castle,
+            Castle,
+            Empty,
+            Empty,
+            Attacker,
+            Attacker,
+            Attacker,
+            Attacker,
+            Attacker,
+            Empty,
+            Empty,
+            Castle,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Attacker,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Attacker,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Defender,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Attacker,
+            Attacker,
+            Empty,
+            Empty,
+            Empty,
+            Defender,
+            Defender,
+            Defender,
+            Empty,
+            Empty,
+            Empty,
+            Attacker,
+            Attacker,
+            Attacker,
+            Empty,
+            Defender,
+            Defender,
+            CenterCastleWithKing,
+            Defender,
+            Defender,
+            Empty,
+            Attacker,
+            Attacker,
+            Attacker,
+            Empty,
+            Empty,
+            Empty,
+            Defender,
+            Defender,
+            Defender,
+            Empty,
+            Empty,
+            Empty,
+            Attacker,
+            Attacker,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Defender,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Attacker,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Attacker,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Castle,
+            Empty,
+            Empty,
+            Attacker,
+            Attacker,
+            Attacker,
+            Attacker,
+            Attacker,
+            Empty,
+            Empty,
+            Castle,
         ],
     };
 
@@ -52,11 +161,55 @@ pub fn brandubh() -> Tafl<49> {
         side: Side::Attacker,
         row_size: 7,
         board: [
-            Castle, Empty, Empty, Attacker, Empty, Empty, Castle, Empty, Empty, Empty, Attacker,
-            Empty, Empty, Empty, Empty, Empty, Empty, Defender, Empty, Empty, Empty, Attacker,
-            Attacker, Defender, CenterCastleWithKing, Defender, Attacker, Attacker, Empty, Empty, Empty, Defender,
-            Empty, Empty, Empty, Empty, Empty, Empty, Attacker, Empty, Empty, Empty, Castle, Empty,
-            Empty, Attacker, Empty, Empty, Castle,
+            Castle,
+            Empty,
+            Empty,
+            Attacker,
+            Empty,
+            Empty,
+            Castle,
+            Empty,
+            Empty,
+            Empty,
+            Attacker,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Defender,
+            Empty,
+            Empty,
+            Empty,
+            Attacker,
+            Attacker,
+            Defender,
+            CenterCastleWithKing,
+            Defender,
+            Attacker,
+            Attacker,
+            Empty,
+            Empty,
+            Empty,
+            Defender,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Empty,
+            Attacker,
+            Empty,
+            Empty,
+            Empty,
+            Castle,
+            Empty,
+            Empty,
+            Attacker,
+            Empty,
+            Empty,
+            Castle,
         ],
     };
     Tafl {
@@ -82,8 +235,8 @@ impl<const N: usize> fmt::Display for Tafl<N> {
                     Tile::King => '⬤',
                     Tile::Castle => '⬛',
                     Tile::CastleWithKing => '⬤',
-                    Tile::CenterCastle => '⬛' ,
-                    Tile::CenterCastleWithKing => '⬤'
+                    Tile::CenterCastle => '⬛',
+                    Tile::CenterCastleWithKing => '⬤',
                 };
                 write!(f, "{} {}", char, '\t')?;
             }
@@ -109,23 +262,29 @@ impl<const N: usize> Tafl<N> {
     }
 
     pub fn move_piece(&mut self, start_idx: usize, end_idx: usize) -> Result<(), String> {
-        match self.state.move_piece(start_idx, end_idx) {
-            Ok(mut new_state) => {
-                new_state.switch_side();
-                self.history.push(self.state);
-                self.state = new_state;
-                self.validate_game_state();
-                Ok(())
-            }
-            Err(error_string) => {
-                println!("Error {}", error_string);
-                Err(error_string)
-            }
+        match self.game_status {
+            GameStatus::Playing => 
+                (match self.state.move_piece(start_idx, end_idx) {
+                    Ok(mut new_state) => {
+                        new_state.switch_side();
+                        self.history.push(self.state);
+                        self.state = new_state;
+                        self.validate_game_state();
+                        Ok(())
+                    }
+                    Err(error_string) => {
+                        println!("Error {}", error_string);
+                        Err(error_string)
+                    }
+                }),
+            
+            GameStatus::Setup => Err("Cannot move piece, Game is in setup modues".to_string()),
+            GameStatus::Over(_winner) => Err("Cannot move piece, Game Over".to_string()),
         }
     }
 
     fn validate_game_state(&mut self) -> () {
-        match self.state.winner(){
+        match self.state.winner() {
             Some(side) => self.game_status = GameStatus::Over(side),
             None => {}
         }
