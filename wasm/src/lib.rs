@@ -5,4 +5,5 @@ mod side;
 mod state;
 mod tafl;
 mod tile;
+mod minimax;
 mod test;

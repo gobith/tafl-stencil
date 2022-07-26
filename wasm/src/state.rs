@@ -193,4 +193,8 @@ impl<const N: usize> State<N> {
 
         clone
     }
+
+    pub fn board_size(&self) -> usize {
+        self.row_size * self.row_size
+    }
 }

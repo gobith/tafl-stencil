@@ -1,3 +1,5 @@
+use super::side::Side;
+
 #[derive(Clone, Copy, Debug, PartialEq)]
 
 pub enum Tile {
@@ -57,6 +59,16 @@ impl Tile {
             Tile::King => true,
             Tile::CastleWithKing => true,
             Tile::CenterCastleWithKing => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_side(&self, side: Side) -> bool {
+        match *self {
+            Tile::Empty => false,
+            Tile::Attacker => side == Side::Attacker,
+            Tile::Defender => side == Side::Defender,
+            Tile::King => side == Side::Defender,
             _ => false,
         }
     }
