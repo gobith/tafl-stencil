@@ -34,6 +34,10 @@ impl Brandubh {
         self.tafl.status_string()
     }
 
+    pub fn get_status(&self) -> String {
+        self.tafl.get_status()
+    }
+
     pub fn start_game(
         &mut self,
         defender_index: usize,

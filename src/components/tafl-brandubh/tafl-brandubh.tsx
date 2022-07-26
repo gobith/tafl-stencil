@@ -212,6 +212,8 @@ export class TaflBrandubh {
   playProcedure() {
     return (
       <div>
+        <div>{this.brandubh.get_status()}</div>
+        <div>{this.brandubh.get_string()}</div>
         <button
           onClick={() => {
             this.startNewGame();

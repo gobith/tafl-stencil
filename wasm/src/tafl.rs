@@ -255,6 +255,10 @@ impl<const N: usize> fmt::Display for Tafl<N> {
 }
 
 impl<const N: usize> Tafl<N> {
+    pub fn get_status(&self) -> String {
+        format!("{}", self.game_status)
+    }
+
     pub fn start_game(&mut self, defender: Player, attacker: Player) -> () {
         self.defender = defender;
         self.attacker = attacker;
@@ -263,7 +267,7 @@ impl<const N: usize> Tafl<N> {
 
     pub fn move_piece(&mut self, start_idx: usize, end_idx: usize) -> Result<(), String> {
         match self.game_status {
-            GameStatus::Playing => 
+            GameStatus::Playing => {
                 (match self.state.move_piece(start_idx, end_idx) {
                     Ok(mut new_state) => {
                         new_state.switch_side();
@@ -276,8 +280,9 @@ impl<const N: usize> Tafl<N> {
                         println!("Error {}", error_string);
                         Err(error_string)
                     }
-                }),
-            
+                })
+            }
+
             GameStatus::Setup => Err("Cannot move piece, Game is in setup modues".to_string()),
             GameStatus::Over(_winner) => Err("Cannot move piece, Game Over".to_string()),
         }
